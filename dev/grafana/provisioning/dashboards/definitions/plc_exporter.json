@@ -1,0 +1,2143 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "A dashboard for the PLC exporter",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Average read time of $_latency_register_types",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.05
+              },
+              {
+                "color": "red",
+                "value": 0.1
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 61,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": true,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "repeat": "_latency_register_types",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum(rate(plc_read_time_seconds_sum{job=\"plc_exporter\", instance=\"$instance\", plc=\"$plc\", register_type=\"$_latency_register_types\"}[5m])) \n/ \nsum(rate(plc_read_time_seconds_count{job=\"plc_exporter\", instance=\"$instance\", plc=\"$plc\", register_type=\"$_latency_register_types\"}[5m]))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Latency 5m: [$_latency_register_types]",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "5 minute error count of reading $_error_register_types",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 0,
+        "y": 8
+      },
+      "id": 94,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": true,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "repeat": "_error_register_types",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "sum(increase(plc_error_count_total{job=\"plc_exporter\", instance=\"$instance\", plc=\"$plc\", register_type=\"$_error_register_types\"}[5m]))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Error count 5m: [$_error_register_types]",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Holding Registers",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Reading from holding register $holding_registers.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*ascii/"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "NUL"
+                      },
+                      "1": {
+                        "index": 1,
+                        "text": "SOH"
+                      },
+                      "2": {
+                        "index": 2,
+                        "text": "STX"
+                      },
+                      "3": {
+                        "index": 3,
+                        "text": "ETX"
+                      },
+                      "4": {
+                        "index": 4,
+                        "text": "EOT"
+                      },
+                      "5": {
+                        "index": 5,
+                        "text": "ENQ"
+                      },
+                      "6": {
+                        "index": 6,
+                        "text": "ACK"
+                      },
+                      "7": {
+                        "index": 7,
+                        "text": "BEL"
+                      },
+                      "8": {
+                        "index": 8,
+                        "text": "BS"
+                      },
+                      "9": {
+                        "index": 9,
+                        "text": "TAB"
+                      },
+                      "10": {
+                        "index": 10,
+                        "text": "LF"
+                      },
+                      "11": {
+                        "index": 11,
+                        "text": "VT"
+                      },
+                      "12": {
+                        "index": 12,
+                        "text": "FF"
+                      },
+                      "13": {
+                        "index": 13,
+                        "text": "CR"
+                      },
+                      "14": {
+                        "index": 14,
+                        "text": "SO"
+                      },
+                      "15": {
+                        "index": 15,
+                        "text": "SI"
+                      },
+                      "16": {
+                        "index": 16,
+                        "text": "DLE"
+                      },
+                      "17": {
+                        "index": 17,
+                        "text": "DC1"
+                      },
+                      "18": {
+                        "index": 18,
+                        "text": "DC2"
+                      },
+                      "19": {
+                        "index": 19,
+                        "text": "DC3"
+                      },
+                      "20": {
+                        "index": 20,
+                        "text": "DC4"
+                      },
+                      "21": {
+                        "index": 21,
+                        "text": "NAK"
+                      },
+                      "22": {
+                        "index": 22,
+                        "text": "SYN"
+                      },
+                      "23": {
+                        "index": 23,
+                        "text": "ETB"
+                      },
+                      "24": {
+                        "index": 24,
+                        "text": "CAN"
+                      },
+                      "25": {
+                        "index": 25,
+                        "text": "EM"
+                      },
+                      "26": {
+                        "index": 26,
+                        "text": "SUB"
+                      },
+                      "27": {
+                        "index": 27,
+                        "text": "ESC"
+                      },
+                      "28": {
+                        "index": 28,
+                        "text": "FS"
+                      },
+                      "29": {
+                        "index": 29,
+                        "text": "GS"
+                      },
+                      "30": {
+                        "index": 30,
+                        "text": "RS"
+                      },
+                      "31": {
+                        "index": 31,
+                        "text": "US"
+                      },
+                      "32": {
+                        "index": 32
+                      },
+                      "33": {
+                        "index": 33,
+                        "text": "!"
+                      },
+                      "34": {
+                        "index": 34,
+                        "text": "\""
+                      },
+                      "35": {
+                        "index": 35,
+                        "text": "#"
+                      },
+                      "36": {
+                        "index": 36,
+                        "text": "$"
+                      },
+                      "37": {
+                        "index": 37,
+                        "text": "%"
+                      },
+                      "38": {
+                        "index": 38,
+                        "text": "&"
+                      },
+                      "39": {
+                        "index": 39,
+                        "text": "'"
+                      },
+                      "40": {
+                        "index": 40,
+                        "text": "("
+                      },
+                      "41": {
+                        "index": 41,
+                        "text": ")"
+                      },
+                      "42": {
+                        "index": 42,
+                        "text": "*"
+                      },
+                      "43": {
+                        "index": 43,
+                        "text": "+"
+                      },
+                      "44": {
+                        "index": 44,
+                        "text": ","
+                      },
+                      "45": {
+                        "index": 45,
+                        "text": "-"
+                      },
+                      "46": {
+                        "index": 46,
+                        "text": "."
+                      },
+                      "47": {
+                        "index": 47,
+                        "text": "/"
+                      },
+                      "48": {
+                        "index": 48,
+                        "text": "0"
+                      },
+                      "49": {
+                        "index": 49,
+                        "text": "1"
+                      },
+                      "50": {
+                        "index": 50,
+                        "text": "2"
+                      },
+                      "51": {
+                        "index": 51,
+                        "text": "3"
+                      },
+                      "52": {
+                        "index": 52,
+                        "text": "4"
+                      },
+                      "53": {
+                        "index": 53,
+                        "text": "5"
+                      },
+                      "54": {
+                        "index": 54,
+                        "text": "6"
+                      },
+                      "55": {
+                        "index": 55,
+                        "text": "7"
+                      },
+                      "56": {
+                        "index": 56,
+                        "text": "8"
+                      },
+                      "57": {
+                        "index": 57,
+                        "text": "9"
+                      },
+                      "58": {
+                        "index": 58,
+                        "text": ":"
+                      },
+                      "59": {
+                        "index": 59,
+                        "text": ";"
+                      },
+                      "60": {
+                        "index": 60,
+                        "text": "<"
+                      },
+                      "61": {
+                        "index": 61,
+                        "text": "="
+                      },
+                      "62": {
+                        "index": 62,
+                        "text": ">"
+                      },
+                      "63": {
+                        "index": 63,
+                        "text": "?"
+                      },
+                      "64": {
+                        "index": 64,
+                        "text": "@"
+                      },
+                      "65": {
+                        "index": 65,
+                        "text": "A"
+                      },
+                      "66": {
+                        "index": 66,
+                        "text": "B"
+                      },
+                      "67": {
+                        "index": 67,
+                        "text": "C"
+                      },
+                      "68": {
+                        "index": 68,
+                        "text": "D"
+                      },
+                      "69": {
+                        "index": 69,
+                        "text": "E"
+                      },
+                      "70": {
+                        "index": 70,
+                        "text": "F"
+                      },
+                      "71": {
+                        "index": 71,
+                        "text": "G"
+                      },
+                      "72": {
+                        "index": 72,
+                        "text": "H"
+                      },
+                      "73": {
+                        "index": 73,
+                        "text": "I"
+                      },
+                      "74": {
+                        "index": 74,
+                        "text": "J"
+                      },
+                      "75": {
+                        "index": 75,
+                        "text": "K"
+                      },
+                      "76": {
+                        "index": 76,
+                        "text": "L"
+                      },
+                      "77": {
+                        "index": 77,
+                        "text": "M"
+                      },
+                      "78": {
+                        "index": 78,
+                        "text": "N"
+                      },
+                      "79": {
+                        "index": 79,
+                        "text": "O"
+                      },
+                      "80": {
+                        "index": 80,
+                        "text": "P"
+                      },
+                      "81": {
+                        "index": 81,
+                        "text": "Q"
+                      },
+                      "82": {
+                        "index": 82,
+                        "text": "R"
+                      },
+                      "83": {
+                        "index": 83,
+                        "text": "S"
+                      },
+                      "84": {
+                        "index": 84,
+                        "text": "T"
+                      },
+                      "85": {
+                        "index": 85,
+                        "text": "U"
+                      },
+                      "86": {
+                        "index": 86,
+                        "text": "V"
+                      },
+                      "87": {
+                        "index": 87,
+                        "text": "W"
+                      },
+                      "88": {
+                        "index": 88,
+                        "text": "X"
+                      },
+                      "89": {
+                        "index": 89,
+                        "text": "Y"
+                      },
+                      "90": {
+                        "index": 90,
+                        "text": "Z"
+                      },
+                      "91": {
+                        "index": 91,
+                        "text": "["
+                      },
+                      "92": {
+                        "index": 92,
+                        "text": "\\"
+                      },
+                      "93": {
+                        "index": 93,
+                        "text": "]"
+                      },
+                      "94": {
+                        "index": 94,
+                        "text": "^"
+                      },
+                      "95": {
+                        "index": 95,
+                        "text": "_"
+                      },
+                      "96": {
+                        "index": 96,
+                        "text": "`"
+                      },
+                      "97": {
+                        "index": 97,
+                        "text": "a"
+                      },
+                      "98": {
+                        "index": 98,
+                        "text": "b"
+                      },
+                      "99": {
+                        "index": 99,
+                        "text": "c"
+                      },
+                      "100": {
+                        "index": 100,
+                        "text": "d"
+                      },
+                      "101": {
+                        "index": 101,
+                        "text": "e"
+                      },
+                      "102": {
+                        "index": 102,
+                        "text": "f"
+                      },
+                      "103": {
+                        "index": 103,
+                        "text": "g"
+                      },
+                      "104": {
+                        "index": 104,
+                        "text": "h"
+                      },
+                      "105": {
+                        "index": 105,
+                        "text": "i"
+                      },
+                      "106": {
+                        "index": 106,
+                        "text": "j"
+                      },
+                      "107": {
+                        "index": 107,
+                        "text": "k"
+                      },
+                      "108": {
+                        "index": 108,
+                        "text": "l"
+                      },
+                      "109": {
+                        "index": 109,
+                        "text": "m"
+                      },
+                      "110": {
+                        "index": 110,
+                        "text": "n"
+                      },
+                      "111": {
+                        "index": 111,
+                        "text": "o"
+                      },
+                      "112": {
+                        "index": 112,
+                        "text": "p"
+                      },
+                      "113": {
+                        "index": 113,
+                        "text": "q"
+                      },
+                      "114": {
+                        "index": 114,
+                        "text": "r"
+                      },
+                      "115": {
+                        "index": 115,
+                        "text": "s"
+                      },
+                      "116": {
+                        "index": 116,
+                        "text": "t"
+                      },
+                      "117": {
+                        "index": 117,
+                        "text": "u"
+                      },
+                      "118": {
+                        "index": 118,
+                        "text": "v"
+                      },
+                      "119": {
+                        "index": 119,
+                        "text": "w"
+                      },
+                      "120": {
+                        "index": 120,
+                        "text": "x"
+                      },
+                      "121": {
+                        "index": 121,
+                        "text": "y"
+                      },
+                      "122": {
+                        "index": 122,
+                        "text": "z"
+                      },
+                      "123": {
+                        "index": 123,
+                        "text": "{"
+                      },
+                      "124": {
+                        "index": 124,
+                        "text": "|"
+                      },
+                      "125": {
+                        "index": 125,
+                        "text": "}"
+                      },
+                      "126": {
+                        "index": 126,
+                        "text": "~"
+                      },
+                      "127": {
+                        "index": 127,
+                        "text": "DEL"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "11.2.0",
+      "repeat": "holding_registers",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "plc_holding_registers{instance=\"$instance\", job=\"plc_exporter\", name=\"$holding_registers\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{start_address}} - {{value_type}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "$holding_registers",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The change over time of each holding register value (non ascii). Filter out by clicking the legends in the graph.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepBefore",
+            "lineWidth": 1,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 33,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "plc_holding_registers{instance=\"$instance\", job=\"plc_exporter\", value_type!=\"ascii\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}} - {{value_type}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Change over time in holding registers",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 5,
+      "panels": [],
+      "title": "Input registers",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Reading from input register $input_registers.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*ascii/"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "NUL"
+                      },
+                      "1": {
+                        "index": 1,
+                        "text": "SOH"
+                      },
+                      "2": {
+                        "index": 2,
+                        "text": "STX"
+                      },
+                      "3": {
+                        "index": 3,
+                        "text": "ETX"
+                      },
+                      "4": {
+                        "index": 4,
+                        "text": "EOT"
+                      },
+                      "5": {
+                        "index": 5,
+                        "text": "ENQ"
+                      },
+                      "6": {
+                        "index": 6,
+                        "text": "ACK"
+                      },
+                      "7": {
+                        "index": 7,
+                        "text": "BEL"
+                      },
+                      "8": {
+                        "index": 8,
+                        "text": "BS"
+                      },
+                      "9": {
+                        "index": 9,
+                        "text": "TAB"
+                      },
+                      "10": {
+                        "index": 10,
+                        "text": "LF"
+                      },
+                      "11": {
+                        "index": 11,
+                        "text": "VT"
+                      },
+                      "12": {
+                        "index": 12,
+                        "text": "FF"
+                      },
+                      "13": {
+                        "index": 13,
+                        "text": "CR"
+                      },
+                      "14": {
+                        "index": 14,
+                        "text": "SO"
+                      },
+                      "15": {
+                        "index": 15,
+                        "text": "SI"
+                      },
+                      "16": {
+                        "index": 16,
+                        "text": "DLE"
+                      },
+                      "17": {
+                        "index": 17,
+                        "text": "DC1"
+                      },
+                      "18": {
+                        "index": 18,
+                        "text": "DC2"
+                      },
+                      "19": {
+                        "index": 19,
+                        "text": "DC3"
+                      },
+                      "20": {
+                        "index": 20,
+                        "text": "DC4"
+                      },
+                      "21": {
+                        "index": 21,
+                        "text": "NAK"
+                      },
+                      "22": {
+                        "index": 22,
+                        "text": "SYN"
+                      },
+                      "23": {
+                        "index": 23,
+                        "text": "ETB"
+                      },
+                      "24": {
+                        "index": 24,
+                        "text": "CAN"
+                      },
+                      "25": {
+                        "index": 25,
+                        "text": "EM"
+                      },
+                      "26": {
+                        "index": 26,
+                        "text": "SUB"
+                      },
+                      "27": {
+                        "index": 27,
+                        "text": "ESC"
+                      },
+                      "28": {
+                        "index": 28,
+                        "text": "FS"
+                      },
+                      "29": {
+                        "index": 29,
+                        "text": "GS"
+                      },
+                      "30": {
+                        "index": 30,
+                        "text": "RS"
+                      },
+                      "31": {
+                        "index": 31,
+                        "text": "US"
+                      },
+                      "32": {
+                        "index": 32
+                      },
+                      "33": {
+                        "index": 33,
+                        "text": "!"
+                      },
+                      "34": {
+                        "index": 34,
+                        "text": "\""
+                      },
+                      "35": {
+                        "index": 35,
+                        "text": "#"
+                      },
+                      "36": {
+                        "index": 36,
+                        "text": "$"
+                      },
+                      "37": {
+                        "index": 37,
+                        "text": "%"
+                      },
+                      "38": {
+                        "index": 38,
+                        "text": "&"
+                      },
+                      "39": {
+                        "index": 39,
+                        "text": "'"
+                      },
+                      "40": {
+                        "index": 40,
+                        "text": "("
+                      },
+                      "41": {
+                        "index": 41,
+                        "text": ")"
+                      },
+                      "42": {
+                        "index": 42,
+                        "text": "*"
+                      },
+                      "43": {
+                        "index": 43,
+                        "text": "+"
+                      },
+                      "44": {
+                        "index": 44,
+                        "text": ","
+                      },
+                      "45": {
+                        "index": 45,
+                        "text": "-"
+                      },
+                      "46": {
+                        "index": 46,
+                        "text": "."
+                      },
+                      "47": {
+                        "index": 47,
+                        "text": "/"
+                      },
+                      "48": {
+                        "index": 48,
+                        "text": "0"
+                      },
+                      "49": {
+                        "index": 49,
+                        "text": "1"
+                      },
+                      "50": {
+                        "index": 50,
+                        "text": "2"
+                      },
+                      "51": {
+                        "index": 51,
+                        "text": "3"
+                      },
+                      "52": {
+                        "index": 52,
+                        "text": "4"
+                      },
+                      "53": {
+                        "index": 53,
+                        "text": "5"
+                      },
+                      "54": {
+                        "index": 54,
+                        "text": "6"
+                      },
+                      "55": {
+                        "index": 55,
+                        "text": "7"
+                      },
+                      "56": {
+                        "index": 56,
+                        "text": "8"
+                      },
+                      "57": {
+                        "index": 57,
+                        "text": "9"
+                      },
+                      "58": {
+                        "index": 58,
+                        "text": ":"
+                      },
+                      "59": {
+                        "index": 59,
+                        "text": ";"
+                      },
+                      "60": {
+                        "index": 60,
+                        "text": "<"
+                      },
+                      "61": {
+                        "index": 61,
+                        "text": "="
+                      },
+                      "62": {
+                        "index": 62,
+                        "text": ">"
+                      },
+                      "63": {
+                        "index": 63,
+                        "text": "?"
+                      },
+                      "64": {
+                        "index": 64,
+                        "text": "@"
+                      },
+                      "65": {
+                        "index": 65,
+                        "text": "A"
+                      },
+                      "66": {
+                        "index": 66,
+                        "text": "B"
+                      },
+                      "67": {
+                        "index": 67,
+                        "text": "C"
+                      },
+                      "68": {
+                        "index": 68,
+                        "text": "D"
+                      },
+                      "69": {
+                        "index": 69,
+                        "text": "E"
+                      },
+                      "70": {
+                        "index": 70,
+                        "text": "F"
+                      },
+                      "71": {
+                        "index": 71,
+                        "text": "G"
+                      },
+                      "72": {
+                        "index": 72,
+                        "text": "H"
+                      },
+                      "73": {
+                        "index": 73,
+                        "text": "I"
+                      },
+                      "74": {
+                        "index": 74,
+                        "text": "J"
+                      },
+                      "75": {
+                        "index": 75,
+                        "text": "K"
+                      },
+                      "76": {
+                        "index": 76,
+                        "text": "L"
+                      },
+                      "77": {
+                        "index": 77,
+                        "text": "M"
+                      },
+                      "78": {
+                        "index": 78,
+                        "text": "N"
+                      },
+                      "79": {
+                        "index": 79,
+                        "text": "O"
+                      },
+                      "80": {
+                        "index": 80,
+                        "text": "P"
+                      },
+                      "81": {
+                        "index": 81,
+                        "text": "Q"
+                      },
+                      "82": {
+                        "index": 82,
+                        "text": "R"
+                      },
+                      "83": {
+                        "index": 83,
+                        "text": "S"
+                      },
+                      "84": {
+                        "index": 84,
+                        "text": "T"
+                      },
+                      "85": {
+                        "index": 85,
+                        "text": "U"
+                      },
+                      "86": {
+                        "index": 86,
+                        "text": "V"
+                      },
+                      "87": {
+                        "index": 87,
+                        "text": "W"
+                      },
+                      "88": {
+                        "index": 88,
+                        "text": "X"
+                      },
+                      "89": {
+                        "index": 89,
+                        "text": "Y"
+                      },
+                      "90": {
+                        "index": 90,
+                        "text": "Z"
+                      },
+                      "91": {
+                        "index": 91,
+                        "text": "["
+                      },
+                      "92": {
+                        "index": 92,
+                        "text": "\\"
+                      },
+                      "93": {
+                        "index": 93,
+                        "text": "]"
+                      },
+                      "94": {
+                        "index": 94,
+                        "text": "^"
+                      },
+                      "95": {
+                        "index": 95,
+                        "text": "_"
+                      },
+                      "96": {
+                        "index": 96,
+                        "text": "`"
+                      },
+                      "97": {
+                        "index": 97,
+                        "text": "a"
+                      },
+                      "98": {
+                        "index": 98,
+                        "text": "b"
+                      },
+                      "99": {
+                        "index": 99,
+                        "text": "c"
+                      },
+                      "100": {
+                        "index": 100,
+                        "text": "d"
+                      },
+                      "101": {
+                        "index": 101,
+                        "text": "e"
+                      },
+                      "102": {
+                        "index": 102,
+                        "text": "f"
+                      },
+                      "103": {
+                        "index": 103,
+                        "text": "g"
+                      },
+                      "104": {
+                        "index": 104,
+                        "text": "h"
+                      },
+                      "105": {
+                        "index": 105,
+                        "text": "i"
+                      },
+                      "106": {
+                        "index": 106,
+                        "text": "j"
+                      },
+                      "107": {
+                        "index": 107,
+                        "text": "k"
+                      },
+                      "108": {
+                        "index": 108,
+                        "text": "l"
+                      },
+                      "109": {
+                        "index": 109,
+                        "text": "m"
+                      },
+                      "110": {
+                        "index": 110,
+                        "text": "n"
+                      },
+                      "111": {
+                        "index": 111,
+                        "text": "o"
+                      },
+                      "112": {
+                        "index": 112,
+                        "text": "p"
+                      },
+                      "113": {
+                        "index": 113,
+                        "text": "q"
+                      },
+                      "114": {
+                        "index": 114,
+                        "text": "r"
+                      },
+                      "115": {
+                        "index": 115,
+                        "text": "s"
+                      },
+                      "116": {
+                        "index": 116,
+                        "text": "t"
+                      },
+                      "117": {
+                        "index": 117,
+                        "text": "u"
+                      },
+                      "118": {
+                        "index": 118,
+                        "text": "v"
+                      },
+                      "119": {
+                        "index": 119,
+                        "text": "w"
+                      },
+                      "120": {
+                        "index": 120,
+                        "text": "x"
+                      },
+                      "121": {
+                        "index": 121,
+                        "text": "y"
+                      },
+                      "122": {
+                        "index": 122,
+                        "text": "z"
+                      },
+                      "123": {
+                        "index": 123,
+                        "text": "{"
+                      },
+                      "124": {
+                        "index": 124,
+                        "text": "|"
+                      },
+                      "125": {
+                        "index": 125,
+                        "text": "}"
+                      },
+                      "126": {
+                        "index": 126,
+                        "text": "~"
+                      },
+                      "127": {
+                        "index": 127,
+                        "text": "DEL"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 30
+      },
+      "id": 21,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "11.2.0",
+      "repeat": "input_registers",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "plc_input_registers{instance=\"$instance\", job=\"plc_exporter\", name=\"$input_registers\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{start_address}} - {{value_type}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "$input_registers",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "The change over time of each input register value (non ascii). Filter out by clicking the legends in the graph.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": ["argon_flow_rate - uint16"],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "plc_input_registers{instance=\"$instance\", job=\"plc_exporter\", value_type!=\"ascii\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{name}} - {{value_type}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Change over time in input registers",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 3,
+      "panels": [],
+      "title": "Discrete Inputs",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Reading from discrete input $discrete_inputs. 'Off' means the value read is 0 and 'On' meaning the value is set to 1",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "last",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "False"
+                      },
+                      "1": {
+                        "index": 1,
+                        "text": "True"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 44
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "11.2.0",
+      "repeat": "discrete_inputs",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "plc_discrete_inputs{instance=\"$instance\", job=\"plc_exporter\", name=\"$discrete_inputs\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{start_address}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "$discrete_inputs",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 49
+      },
+      "id": 2,
+      "panels": [],
+      "title": "Coils",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "Reading from coil $coils. 'Off' means the value read is 0 and 'On' meaning the value is set to 1",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byValue",
+              "options": {
+                "op": "gte",
+                "reducer": "last",
+                "value": 0
+              }
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "Off"
+                      },
+                      "1": {
+                        "index": 1,
+                        "text": "On"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 50
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "11.2.0",
+      "repeat": "coils",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "plc_coils{instance=\"$instance\", job=\"plc_exporter\", name=\"$coils\"}",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{start_address}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "$coils",
+      "type": "stat"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "PBFA97CFB590B2093"
+        },
+        "description": "Select the prometheus datasource from which the metrics should be fetched",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "localhost:9075",
+          "value": "localhost:9075"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_info,instance)",
+        "description": "Instance filters metrics to a specific host machine",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Instance",
+        "multi": false,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_info,instance)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "master",
+          "value": "master"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_info{job=\"plc_exporter\", instance=\"$instance\"},plc)",
+        "description": "Select the plc to display",
+        "hide": 0,
+        "includeAll": false,
+        "label": "PLC",
+        "multi": false,
+        "name": "plc",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_info{job=\"plc_exporter\", instance=\"$instance\"},plc)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["All"],
+          "value": ["$__all"]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_coils{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},name)",
+        "description": "List of coil metric names",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Coils",
+        "multi": true,
+        "name": "coils",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_coils{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["All"],
+          "value": ["$__all"]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_discrete_inputs{plc=\"$plc\", instance=\"$instance\", job=\"plc_exporter\"},name)",
+        "description": "List of discrete input metric names",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Discrete inputs",
+        "multi": true,
+        "name": "discrete_inputs",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_discrete_inputs{plc=\"$plc\", instance=\"$instance\", job=\"plc_exporter\"},name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["All"],
+          "value": ["$__all"]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_input_registers{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},name)",
+        "description": "List of input register metrics",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Input registers",
+        "multi": true,
+        "name": "input_registers",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_input_registers{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["All"],
+          "value": ["$__all"]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_holding_registers{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},name)",
+        "description": "List of holding register metrics",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Holding registers",
+        "multi": true,
+        "name": "holding_registers",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_holding_registers{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},name)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["All"],
+          "value": ["$__all"]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_read_time_seconds_bucket{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},register_type)",
+        "description": "Types of registers in latency metrics",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Latency register types",
+        "multi": true,
+        "name": "_latency_register_types",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_read_time_seconds_bucket{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},register_type)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ["All"],
+          "value": ["$__all"]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(plc_error_count_total{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},register_type)",
+        "description": "List of register types available in error metrics",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Error register types",
+        "multi": true,
+        "name": "_error_register_types",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(plc_error_count_total{instance=\"$instance\", job=\"plc_exporter\", plc=\"$plc\"},register_type)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "PLC Dashboard",
+  "uid": "plc_exporter",
+  "version": 22,
+  "weekStart": ""
+}

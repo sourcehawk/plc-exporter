@@ -1,0 +1,63 @@
+# Set up grafana, alertmanager and prometheus to develop dashboard from metrics
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    network_mode: host
+    # ports:
+    #   - "3000:3000"
+    volumes:
+      - ./dev/grafana/data:/var/lib/grafana:rw
+      - ./dev/grafana/provisioning:/etc/grafana/provisioning:rw
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: false
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    network_mode: host
+    # ports:
+    #   - "9093:9093"
+    volumes:
+      - alertmanager-data:/data
+      - ./dev/alertmanager:/etc/alertmanager/config
+    command:
+      - --config.file=/etc/alertmanager/config/alertmanager.yml
+      - --log.level=debug
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    network_mode: host
+    # ports:
+    #   - "9090:9090"
+    volumes:
+      - prometheus-data:/prometheus
+      - ./dev/prometheus:/etc/prometheus
+      - ./examples/alerting_rules:/etc/prometheus/extra/alerting_rules
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+
+  plc_exporter:
+    hostname: plc-exporter
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: exporter
+    network_mode: host
+    # ports:
+    #   - "9075:9075"
+    volumes:
+      - ./examples:/configs
+    command:
+      - --config=/configs/config.yaml
+
+volumes:
+  alertmanager-data: {}
+  grafana-data: {}
+  prometheus-data: {}

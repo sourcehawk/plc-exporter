@@ -1,0 +1,153 @@
+exporter:
+  # The port on which the Prometheus exporter will listen for incoming requests.
+  port: 9075
+  # The interval at which the Prometheus exporter will scrape data from the PLC.
+  scrape_interval: 10s
+  # Log level for the exporter (debug, info, warn, error)
+  log_level: "debug"
+plc:
+  # The IP address of the PLC that the exporter will connect to.
+  host: "localhost"
+  # The port number of the PLC that the exporter will connect to.
+  port: 1502
+  # Big-endian also known as "network byte order" is more commonly used for data representation.
+  # This is consistent with many Modbus devices, where the most significant byte (MSB) is transmitted first.
+  # Valid values: "big", "little"
+  endianness: "big"
+  # Word order to use for reading 32-bit values
+  # Valid values: "big", "little"
+  word_order: "big"
+
+# The metric namespace (prefix) to use on all metrics
+# The default plc_exporter dashboard expects the "plc" namespace.
+# Changing this value is NOT RECOMMENDED unless you know what you are doing.
+namespace: "plc"
+
+# The identifier to use for this plc, this will be added as the value of 'plc' label on all metrics
+# and should be unique for each PLC you have in your system.
+identifier: "master"
+
+# The layout of the metrics
+# When set to "static", the metrics names will be defined by their "name" field in the configuration file.
+# When set to "dynamic", the metric names will be defined by register type and uniquely identified by "name" labels.
+# The default plc_exporter dashboard expects the "dynamic" layout, but if you are making your own dashboards,
+# the static layout might be more convenient.
+# Valid values: "static", "dynamic"
+metric_layout: "dynamic"
+
+# When set to true, the exporter will return mock data instead of connecting to a PLC.
+# This is useful for generating example dashboards without having to connect to a PLC.
+# The mock data is specified via the `mock` key in each register type and defaults to 0.
+mock: true
+
+# The labels to attach to all metrics
+static_labels:
+  manufacturer: "test"
+  model: "test-2000"
+
+# Coil (Digital Output):
+# Definition: Coils represent discrete outputs, which are binary (ON/OFF, TRUE/FALSE) values.
+# Function: Coils are used to control physical devices like relays, motors, lights, or any output devices connected to the PLC.
+# Example: Turning on a light by setting a coil to 1 (ON) and turning it off by setting it to 0 (OFF).
+coils:
+  - name: "light_green"
+    description: "Turns on the green light when enabled (1)"
+    address: 0x0001
+    mock: 1
+
+  - name: "light_red"
+    description: "Turns on the red light when enabled (1)"
+    address: 0x0003
+    mock: 0
+
+  - name: "light_yellow"
+    description: "Turns on the yellow light when enabled (1)"
+    address: 0x0005
+    mock: 0
+
+  - name: "chamber_light_blue"
+    description: "Turns on the blue chamber light when enabled (1)"
+    address: 0x0007
+    mock: 1
+
+  - name: "chamber_light_purple"
+    description: "Turns on the purple chamber light when enabled (1)"
+    address: 0x0009
+    mock: 1
+
+  - name: "crane_motor_power"
+    description: "Starts the crane motor when enabled (1)"
+    address: 0x000D
+    mock: 1
+
+  - name: "crane_motor_direction_left"
+    description: "Sets the crane motor direction to left when enabled (1)"
+    address: 0x000E
+    mock: 0
+
+  - name: "crane_motor_direction_right"
+    description: "Sets the crane motor direction to right when enabled (1)"
+    address: 0x000F
+    mock: 1
+
+# Discrete Input (Digital Input)
+# Definition: Discrete inputs are binary (ON/OFF) values representing the status of external devices or sensors.
+# Function: These are read-only inputs that allow the PLC to detect signals like switches, proximity sensors, or buttons.
+# Example: A push-button sends a signal to the PLC when pressed, and this is read as a discrete input.
+discrete_inputs:
+  - name: "emergency_stop"
+    description: "Indicates if the emergency stop button is active"
+    address: 0x0004
+    mock: 1
+
+  - name: "crane_lift_at_horizontal_max"
+    description: "Indicates if the crane is at the horizontal maximum position (right)"
+    address: 0x0005
+    mock: 1
+
+  - name: "crane_lift_at_horizontal_min"
+    description: "Indicates if the crane is at the horizontal minimum position (left)"
+    address: 0x0006
+    mock: 0
+
+# Input Register (Analog Input):
+# Definition: Input registers are used to read analog values from field devices. Each register holds a 16-bit value.
+# Function: They capture data from sensors that measure continuous processes like temperature, pressure, or voltage.
+# Example: A temperature sensor sending a value of 300°C to an input register.
+input_registers:
+  - name: "temperature"
+    description: "The temperature reported by the sensor"
+    address: 0x0001
+    value_type: "uint16"
+    mock: 254
+
+  - name: "material_name"
+    description: "Testing string"
+    address: 0x0003
+    value_type: "string"
+    size: 2
+    mock: "Fe"
+
+  - name: "material_scalar"
+    description: "Testing float"
+    address: 0x0005
+    value_type: "float32"
+    mock: 3.14
+
+# Holding Register (Analog Output):
+# Definition: Holding registers store values that can be written to or read from, and each register holds a 16-bit value.
+# Function: These registers are typically used to control analog output devices, such as controlling the speed of a motor or adjusting valve positions.
+# Example: Writing a value to a holding register to set the speed of a motor.
+holding_registers:
+  - name: "target_temperature"
+    description: "The target temperature to set the heating element to"
+    address: 0x0001
+    value_type: "uint16"
+    mock: 870
+
+  - name: "test_string"
+    description: "Testing string"
+    address: 0x0003
+    value_type: "string"
+    size: 4
+    mock: "TEST"

@@ -1,0 +1,63 @@
+groups:
+  - name: PLC.Connection
+    rules:
+      - alert: ConnectionDown
+        for: 1m
+        expr: sum(plc_connection_up == 0) by (job, plc, instance)
+        annotations:
+          summary: "PLC {{ $labels.plc }} connection is down"
+          description: "Unable to establish connection to PLC {{ $labels.plc }} for 1 minute (instance {{ $labels.instance }})"
+        labels:
+          severity: critical
+
+  - name: PLC.Latency
+    rules:
+      - alert: HighReadLatency
+        for: 5m
+        expr: (
+          sum(rate(plc_read_time_seconds_sum[5m])) by (job, plc, instance, register_type)
+          /
+          sum(rate(plc_read_time_seconds_count[5m])) by (job, plc, instance, register_type)
+          ) > 0.05
+        annotations:
+          summary: "High read latency on {{ $labels.register_type }} of PLC {{ $labels.plc }}"
+          description: "Read latency on {{ $labels.register_type }} of PLC {{ $labels.plc }} is above 50ms for the last 5 minutes (instance {{ $labels.instance }})"
+        labels:
+          severity: warning
+
+      - alert: HighReadLatency
+        for: 5m
+        expr: (
+          sum(rate(plc_read_time_seconds_sum[5m])) by (job, plc, instance, register_type)
+          /
+          sum(rate(plc_read_time_seconds_count[5m])) by (job, plc, instance, register_type)
+          ) > 0.1
+        annotations:
+          summary: "High read latency on {{ $labels.register_type }} of PLC {{ $labels.plc }}"
+          description: "Read latency on {{ $labels.register_type }} of PLC {{ $labels.plc }} is above 100ms for the last 5 minutes (instance {{ $labels.instance }})"
+        labels:
+          severity: critical
+
+      - alert: HighRegisterReadLatencyError
+        for: 5m
+        expr: (
+          sum(rate(plc_read_time_seconds_sum[5m])) by (job, plc, instance, name)
+          /
+          sum(rate(plc_read_time_seconds_count[5m])) by (job, plc, instance, name)
+          ) > 0.25
+        annotations:
+          summary: "High read latency on register {{ $labels.name }} ({{ $labels.start_address }}) of {{ $labels.register_type }} of PLC {{ $labels.plc }}"
+          description: "Read latency on register {{ $labels.name }} ({{ $labels.start_address }}) of {{ $labels.register_type }} of PLC {{ $labels.plc }} is above 250ms for the last 5 minutes (instance {{ $labels.instance }})"
+        labels:
+          severity: critical
+
+  - name: PLC.Errors
+    rules:
+      - alert: RegisterReadError
+        for: 5m
+        expr: sum(increase(plc_error_count_total[5m])) by (job, plc, instance, name) > 1
+        annotations:
+          summary: "Failing to read registers in PLC {{ $labels.plc }}"
+          description: "Failed to read {{ $labels.plc }} register {{ $labels.name }}({{ $labels.start_address }}) {{ $value }} times over the last 5 minutes (instance {{ $labels.instance }})"
+        labels:
+          severity: critical
