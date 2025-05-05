@@ -266,8 +266,8 @@ The exporter comes with a default dashboard which requires the following configu
 
 The dashboard source can be found [here](dev/grafana/provisioning/dashboards/definitions/plc_exporter.json). You can copy the JSON file and import it into Grafana instance.
 
-![dashboard img 1](./doc/images/plc_exporter_dashboard_01.png)
-![dashboard img 2](./doc/images/plc_exporter_dashboard_02.png)
+![](https://raw.githubusercontent.com/sourcehawk/plc-exporter/refs/heads/master/doc/images/plc_exporter_dashboard_01.png)
+![](https://raw.githubusercontent.com/sourcehawk/plc-exporter/refs/heads/master/doc/images/plc_exporter_dashboard_02.png)
 
 ## Development
 
