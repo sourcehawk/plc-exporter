@@ -5,6 +5,11 @@ on:
     tags:
       - "v*.*.*" # Trigger only on semantic version tags (e.g., v1.2.3)
 
+# Ensure the GITHUB_TOKEN has permissions to read repository contents and write to packages
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
